@@ -1,5 +1,6 @@
 package com.andyadc.bms.file;
 
+import com.andyadc.bms.file.exception.FileSizeLimitExceededException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,20 @@ public class FileStorageService {
         return time + "." + i + "." + name;
     }
 
+    private void check(MultipartFile file) {
+        Long limit = fileStorageSettings.getMaxSize();
+        if (limit != null && limit > 0) {
+            long size = file.getSize() / 1024L;
+            if (size > limit) {
+                throw new FileSizeLimitExceededException("");
+            }
+        }
+    }
+
     public FileStorageDTO store(MultipartFile file) {
         logger.info("Filename: {}, filesize: {} kb", file.getOriginalFilename(), file.getSize() / 1024F);
+
+        check(file);
 
         String date = LocalDate.now().toString().replace("-", "");
         String dir = fileStorageSettings.getPath().getPath() + date + separator;

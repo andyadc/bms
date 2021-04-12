@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "bms.file.storage")
 public class FileStorageSettings {
 
+    // KB
     private Long maxSize;
     private OsPath windows;
     private OsPath linux;
