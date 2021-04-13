@@ -13,6 +13,8 @@
     <groupId>com.andyadc</groupId>
     <artifactId>bms</artifactId>
     <version>1.0.0</version>
+    <name>BMS</name>
+    <description>Backend manage system</description>
 
     <properties>
         <commons-lang.version>3.12.0</commons-lang.version>
@@ -20,6 +22,7 @@
         <guava.version>30.1.1-jre</guava.version>
         <jjwt.version>0.11.2</jjwt.version>
 
+        <java.version>1.8</java.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
@@ -99,5 +102,20 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
