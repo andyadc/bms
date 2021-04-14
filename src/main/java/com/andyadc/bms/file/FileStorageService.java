@@ -23,12 +23,13 @@ public class FileStorageService {
     private FileStorageSettings fileStorageSettings;
 
     private static String genFileName(String name) {
+        name = name.substring(0, Math.min(name.length(), 30));
         String time = LocalTime.now().toString().replace(":", "");
         int i = ThreadLocalRandom.current().nextInt(100, 999);
         return time + "." + i + "." + name;
     }
 
-    private void check(MultipartFile file) {
+    private void checkSize(MultipartFile file) {
         Long limit = fileStorageSettings.getMaxSize();
         if (limit != null && limit > 0) {
             long size = file.getSize() / 1024L;
@@ -41,7 +42,7 @@ public class FileStorageService {
     public FileStorageDTO store(MultipartFile file) {
         logger.info("Filename: {}, filesize: {} kb", file.getOriginalFilename(), file.getSize() / 1024F);
 
-        check(file);
+        checkSize(file);
 
         String date = LocalDate.now().toString().replace("-", "");
         String dir = fileStorageSettings.getPath().getPath() + date + separator;
