@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -20,10 +21,24 @@ public class FileStorageService {
 
     private static final Logger logger = LoggerFactory.getLogger(FileStorageService.class);
     private static final String separator = File.separator;
+    private static final boolean gen_unique_file_name = false;
     private FileStorageSettings fileStorageSettings;
 
-    private static String genFileName(String name) {
-        name = name.substring(0, Math.min(name.length(), 30));
+    public static void main(String[] args) {
+        String fileCompleteName = "135920.175 (1).png";
+        int idx = fileCompleteName.lastIndexOf(" (");
+        System.out.println(idx);
+        System.out.println(fileCompleteName.substring(0, idx));
+        System.out.println(fileCompleteName.substring(idx));
+        System.out.println(fileCompleteName.charAt(idx + 2));
+    }
+
+    private static String generateShortFileName(String name) {
+        return name.substring(0, Math.min(name.length(), 10));
+    }
+
+    private static String generateUniqueFileName(String name) {
+        name = name.substring(0, Math.min(name.length(), 10));
         String time = LocalTime.now().toString().replace(":", "");
         int i = ThreadLocalRandom.current().nextInt(100, 999);
         return time + "." + i + "." + name;
@@ -51,8 +66,34 @@ public class FileStorageService {
             dirFile.mkdirs();
         }
 
-        String newName = genFileName(file.getOriginalFilename());
-        Path path = Paths.get(dir + newName);
+        String filename = "";
+        String extname = "";
+
+        String originalFilename = Objects.requireNonNull(file.getOriginalFilename());
+        int idx = originalFilename.lastIndexOf(".");
+        if (idx != -1) {
+            filename = originalFilename.substring(0, idx);
+            extname = originalFilename.substring(idx);
+        }
+
+        String newFilename = generateShortFileName(filename);
+        if (gen_unique_file_name) {
+            newFilename = generateUniqueFileName(newFilename);
+        }
+        String dest = dir + newFilename + extname;
+        Path path = Paths.get(dest);
+
+        // TODO
+        if (!gen_unique_file_name) {
+            File nFile = path.toFile();
+            boolean ne = nFile.exists();
+            if (ne) {
+                newFilename = newFilename + " (1)";
+                dest = dir + newFilename + extname;
+                path = Paths.get(dest);
+            }
+        }
+
         try {
             file.transferTo(path);
         } catch (IOException e) {
@@ -60,8 +101,8 @@ public class FileStorageService {
         }
 
         FileStorageDTO dto = new FileStorageDTO();
-        String view = FileStorageConstants.RESOURCE_PATH + date + "/" + newName;
-        dto.setLocalStoragePath(dir + newName);
+        String view = FileStorageConstants.RESOURCE_PATH + date + "/" + newFilename + extname;
+        dto.setLocalStoragePath(dir + newFilename + extname);
         dto.setResourcePath(view);
 
         return dto;
