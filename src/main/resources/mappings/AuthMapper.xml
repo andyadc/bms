@@ -25,7 +25,8 @@
     <sql id="Menu_Base_Column_List">
         id
         , parent_id, `type`, `name`, code, permission, component, `path`, icon, seq, target,
-        visible, `status`, create_time, update_time, version
+        visible, `status`,
+        create_time, update_time, version
     </sql>
 
     <!-- /// -->
@@ -33,10 +34,10 @@
     <select id="selectMenuByUserId" resultMap="MenuBaseResultMap">
         SELECT m.*
         FROM auth_menu m
-        LEFT JOIN auth_role_menu rm ON m.id = rm.menu_id
-        LEFT JOIN auth_role r ON rm.role_id = r.id
-        LEFT JOIN auth_user_role ur ON ur.role_id = r.id
-        LEFT JOIN auth_user u ON u.id = ur.user_id
+                 LEFT JOIN auth_role_menu rm ON m.id = rm.menu_id
+                 LEFT JOIN auth_role r ON rm.role_id = r.id
+                 LEFT JOIN auth_user_role ur ON ur.role_id = r.id
+                 LEFT JOIN auth_user u ON u.id = ur.user_id
         WHERE u.id = #{userId}
     </select>
 
