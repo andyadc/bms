@@ -1,28 +1,42 @@
 package com.andyadc.bms.web;
 
 import com.andyadc.bms.auth.dto.AuthUserDTO;
+import com.andyadc.bms.auth.entity.AuthUser;
 import com.andyadc.bms.auth.service.AuthUserService;
+import com.andyadc.bms.event.OnUserRegistrationCompleteEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
 public class AuthUserController {
 
     private AuthUserService authUserService;
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @Autowired
     public void setAuthUserService(AuthUserService authUserService) {
         this.authUserService = authUserService;
     }
 
+    @Autowired
+    public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+        this.applicationEventPublisher = applicationEventPublisher;
+    }
+
     @PostMapping("/auth/register")
     public ResponseEntity<Object> register(@Validated @RequestBody AuthUserDTO user) {
-        authUserService.register(user);
+        AuthUser registerUser = authUserService.register(user);
+        applicationEventPublisher.publishEvent(new OnUserRegistrationCompleteEvent(registerUser));
         return ResponseEntity.ok("success");
     }
 

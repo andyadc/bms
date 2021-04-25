@@ -40,7 +40,7 @@ public class AuthUserService {
         return dto;
     }
 
-    public void register(AuthUserDTO dto) {
+    public AuthUser register(AuthUserDTO dto) {
         String password = passwordService.encode(dto.getPassword());
         AuthUser authUser = new AuthUser();
         authUser.setPassword(password);
@@ -51,6 +51,7 @@ public class AuthUserService {
         authUser.setCreateTime(LocalDateTime.now());
         authUser.setUpdateTime(LocalDateTime.now());
         int result = authMapper.insertUserSelective(authUser);
+        return authUser;
     }
 
     @Autowired
