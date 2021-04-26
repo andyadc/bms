@@ -39,7 +39,11 @@ public class RefreshTokenEndpoint {
     private TokenVerifier tokenVerifier;
     private TokenExtractor tokenExtractor;
 
-    @RequestMapping(value = "/api/auth/token", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(
+            value = "/api/auth/token",
+            method = {RequestMethod.GET, RequestMethod.POST},
+            produces = {MediaType.APPLICATION_JSON_VALUE}
+    )
     public @ResponseBody
     JwtToken refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String tokenPayload = tokenExtractor.extract(request.getHeader(WebSecurityConfig.AUTHENTICATION_HEADER_NAME));
@@ -55,8 +59,9 @@ public class RefreshTokenEndpoint {
         String subject = refreshToken.getSubject();
         AuthUserDTO user = securityService.findByUsername(subject).orElseThrow(() -> new UsernameNotFoundException("User not found: " + subject));
 
-        if (user.getAuthorities() == null) throw new InsufficientAuthenticationException("User has no roles assigned");
-
+        if (user.getAuthorities() == null) {
+            throw new InsufficientAuthenticationException("User has no roles assigned");
+        }
         List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
         UserContext userContext = UserContext.create(user.getUsername(), grantedAuthorities);

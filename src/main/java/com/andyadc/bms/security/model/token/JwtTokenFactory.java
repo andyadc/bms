@@ -7,6 +7,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,25 +21,32 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-public class JwtTokenFactory {
+public class JwtTokenFactory implements InitializingBean {
     private final JwtSettings settings;
-    private final Key key;
+    private Key key;
 
     @Autowired
     public JwtTokenFactory(JwtSettings settings) {
         this.settings = settings;
-        key = new SecretKeySpec(settings.getTokenSigningKey().getBytes(), SignatureAlgorithm.HS512.getJcaName());
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        byte[] keyBytes = settings.getTokenSigningKey().getBytes();
+        key = new SecretKeySpec(keyBytes, SignatureAlgorithm.HS512.getJcaName());
     }
 
     /**
      * Factory method for issuing new JWT Tokens.
      */
     public AccessJwtToken createAccessJwtToken(UserContext userContext) {
-        if (StringUtils.isBlank(userContext.getUsername()))
+        if (StringUtils.isBlank(userContext.getUsername())) {
             throw new IllegalArgumentException("Cannot create JWT Token without username");
+        }
 
-        if (userContext.getAuthorities() == null || userContext.getAuthorities().isEmpty())
+        if (userContext.getAuthorities() == null || userContext.getAuthorities().isEmpty()) {
             throw new IllegalArgumentException("User doesn't have any privileges");
+        }
 
         Claims claims = Jwts.claims().setSubject(userContext.getUsername());
         claims.put("scopes", userContext.getAuthorities().stream().map(Object::toString).collect(Collectors.toList()));
@@ -86,4 +94,5 @@ public class JwtTokenFactory {
 
         return new AccessJwtToken(token, claims);
     }
+
 }
