@@ -1,4 +1,4 @@
-package com.andyadc.bms.web.exception;
+package com.andyadc.bms.web.advice;
 
 import com.andyadc.bms.common.Response;
 import com.google.common.base.Throwables;
