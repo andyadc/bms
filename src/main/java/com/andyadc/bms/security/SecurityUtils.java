@@ -1,5 +1,6 @@
 package com.andyadc.bms.security;
 
+import com.andyadc.bms.security.model.UserContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -23,14 +24,18 @@ public class SecurityUtils {
         }
 
         String username = null;
-        if (authentication.getPrincipal() instanceof UserDetails) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Object target = authentication.getPrincipal();
+        if (target instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) target;
             username = userDetails.getUsername();
-        } else if (authentication.getPrincipal() instanceof String) {
-            username = (String) authentication.getPrincipal();
+        } else if (target instanceof UserContext) {
+            UserContext userContext = (UserContext) target;
+            username = userContext.getUsername();
+        } else if (target instanceof String) {
+            username = (String) target;
         }
 
-        logger.debug("found username [{}] in security context", username);
+        logger.debug("Found username [{}] in security context", username);
         return Optional.ofNullable(username);
     }
 }
