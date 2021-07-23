@@ -4,6 +4,7 @@ import com.andyadc.bms.auth.dto.AuthUserDTO;
 import com.andyadc.bms.auth.entity.AuthUser;
 import com.andyadc.bms.auth.service.AuthUserService;
 import com.andyadc.bms.event.OnUserRegistrationCompleteEvent;
+import com.andyadc.bms.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,11 @@ public class AuthUserController {
 
     @GetMapping("/me")
     public Object get() {
+        SecurityUtils.getCurrentUsername().map(name -> {
+            System.out.println(name);
+            return name;
+        });
+
         return SecurityContextHolder.getContext().getAuthentication();
     }
 
