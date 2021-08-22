@@ -18,7 +18,7 @@
 
     <properties>
         <commons-lang.version>3.12.0</commons-lang.version>
-        <commons-pool.version>2.11.0</commons-pool.version>
+        <commons-pool.version>2.11.1</commons-pool.version>
         <guava.version>30.1.1-jre</guava.version>
         <jjwt.version>0.11.2</jjwt.version>
         <bouncycastle.version>1.69</bouncycastle.version>
