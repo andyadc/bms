@@ -69,7 +69,6 @@ public class RefreshTokenEndpoint {
         return tokenFactory.createAccessJwtToken(userContext);
     }
 
-
     @Autowired
     public void setTokenFactory(JwtTokenFactory tokenFactory) {
         this.tokenFactory = tokenFactory;

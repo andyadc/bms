@@ -1,7 +1,12 @@
 package com.andyadc.bms.auth.entity;
 
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Table
 public class AuthRole {
 
+    @Id
     private Long id;
     private String name;
     private String code;

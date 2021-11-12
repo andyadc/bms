@@ -1,9 +1,13 @@
 package com.andyadc.bms.auth.entity;
 
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 
+@Table
 public class AuthUser {
 
+    @Id
     private Long id;
     private String username;
     private String nickname;

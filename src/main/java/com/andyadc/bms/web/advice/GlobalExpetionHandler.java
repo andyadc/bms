@@ -13,8 +13,12 @@ import java.sql.SQLIntegrityConstraintViolationException;
 
 @RestControllerAdvice
 public class GlobalExpetionHandler {
+
     private static final Logger logger = LoggerFactory.getLogger(GlobalExpetionHandler.class);
 
+    /**
+     *
+     */
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})
     public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         String stackTraceAsString = Throwables.getStackTraceAsString(e);
@@ -25,6 +29,9 @@ public class GlobalExpetionHandler {
         return ResponseEntity.ok(Response.of("400", defaultMessage));
     }
 
+    /**
+     *
+     */
     @ExceptionHandler(value = {SQLIntegrityConstraintViolationException.class})
     public ResponseEntity<Object> handleSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException e) {
         String stackTraceAsString = Throwables.getStackTraceAsString(e);

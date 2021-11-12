@@ -1,6 +1,6 @@
 package com.andyadc.bms.security.exception;
 
-import com.andyadc.bms.common.BaseException;
+import com.andyadc.bms.exception.BaseException;
 
 public class InvalidJwtTokenException extends BaseException {
     public InvalidJwtTokenException(String message) {

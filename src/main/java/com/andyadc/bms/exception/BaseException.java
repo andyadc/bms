@@ -1,4 +1,4 @@
-package com.andyadc.bms.common;
+package com.andyadc.bms.exception;
 
 /**
  * Base Exception is the parent of all exceptions

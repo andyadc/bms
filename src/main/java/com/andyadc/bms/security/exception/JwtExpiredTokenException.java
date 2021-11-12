@@ -4,6 +4,7 @@ import com.andyadc.bms.security.model.token.JwtToken;
 import org.springframework.security.core.AuthenticationException;
 
 public class JwtExpiredTokenException extends AuthenticationException {
+
     private JwtToken token;
 
     public JwtExpiredTokenException(String msg) {

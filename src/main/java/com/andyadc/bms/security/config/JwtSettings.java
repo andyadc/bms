@@ -15,12 +15,10 @@ public class JwtSettings {
      * can be refreshed during this timeframe.
      */
     private Integer refreshTokenExpTime;
-
     /**
      * Token issuer.
      */
     private String tokenIssuer;
-
     /**
      * Key is used to sign .
      */

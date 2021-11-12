@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public class AuthUserService {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthUserService.class);
+
     private AuthMapper authMapper;
     private AuthUserMapper userMapper;
     private PasswordService passwordService;

@@ -1,9 +1,13 @@
 package com.andyadc.bms.auth.entity;
 
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 
+@Table
 public class AuthMenu {
 
+    @Id
     private Long id;
     private Long parentId;
     private Integer type;

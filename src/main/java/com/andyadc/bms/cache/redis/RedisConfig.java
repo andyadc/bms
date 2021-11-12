@@ -42,5 +42,4 @@ public class RedisConfig {
         redisSerializer.setObjectMapper(mapper);
         return redisSerializer;
     }
-
 }
