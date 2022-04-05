@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -86,8 +87,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.ajaxAuthenticationProvider = ajaxAuthenticationProvider;
     }
 
+    // TODO
     @Autowired
-    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+    public void setAuthenticationManager(@Lazy AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
@@ -145,7 +147,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/js/**", "/css/**");
+        web.ignoring().antMatchers("/js/**", "/css/**", "/h2-console/**");
     }
 
     @Override
