@@ -1,17 +1,17 @@
 package com.andyadc.bms.common;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class Response<T> {
 
-    private final LocalDateTime timestamp;
-    private Integer status;
     private String code;
     private String message;
+    private final ZonedDateTime timestamp;
     private T data;
+    private Integer status;
 
     public Response() {
-        this.timestamp = LocalDateTime.now();
+        this.timestamp = ZonedDateTime.now();
     }
 
     public Response(String code, String message) {
@@ -65,7 +65,7 @@ public class Response<T> {
         this.message = message;
     }
 
-    public LocalDateTime getTimestamp() {
+    public ZonedDateTime getTimestamp() {
         return timestamp;
     }
 
